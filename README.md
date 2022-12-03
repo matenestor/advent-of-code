@@ -12,7 +12,7 @@ Execute the Nim interpreter command (or the compilation command, your choice)
 with the file of a chosen day.
 
 ```bash
-# compile, run
+# compile, execute
 nim c day1.nim
 ./day1
 
