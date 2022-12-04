@@ -30,4 +30,6 @@ and the `samples/` directories are. The program searches the input data there.
          and `collect` and `=>` macros
 - Day 2: custom types and enums
 - Day 3: HashSets from the `sets` module
+- Day 4: split string with multiple characters, override a built-in operator
+         by creating my own `func` or `proc`
 
