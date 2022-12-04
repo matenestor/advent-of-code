@@ -23,3 +23,11 @@ nim r day1.nim
 Make sure to execute the solution in the same directory where the `inputs/`
 and the `samples/` directories are. The program searches the input data there.
 
+
+## Learned
+
+- Day 1: array processing with multiple paradigms Nim offers,
+         and `collect` and `=>` macros
+- Day 2: custom types and enums
+- Day 3: HashSets from the `sets` module
+

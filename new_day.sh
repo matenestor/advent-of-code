@@ -20,6 +20,7 @@ echo "inputs/input_$1.txt"
 
 echo -e "import algorithm    # sorted\n"\
 "import math         # sum\n"\
+"import sets         # intersection, toHashSet\n"\
 "import sequtils     # map\n"\
 "import strformat    # echo &\"{}\"\n"\
 "import strutils     # split\n"\
