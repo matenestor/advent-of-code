@@ -23,7 +23,8 @@ echo -e "import algorithm    # sorted\n"\
 "import sequtils     # map\n"\
 "import strformat    # echo &\"{}\"\n"\
 "import strutils     # split\n"\
-"import sugar        # collect, =>\n\n\n"\
+"import sugar        # collect, =>\n"\
+"import tables       # toTable\n\n\n"\
 \
 "proc part1(data: string): int =\n"\
 "    return 0\n\n\n"\
