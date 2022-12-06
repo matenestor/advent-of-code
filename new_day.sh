@@ -18,14 +18,16 @@ touch "inputs/input_$1.txt"
 echo "inputs/input_$1.txt"
 
 
-echo -e "import algorithm    # sorted\n"\
-"import math         # sum\n"\
-"import sets         # intersection, toHashSet\n"\
-"import sequtils     # map\n"\
-"import strformat    # echo &\"{}\"\n"\
-"import strutils     # split\n"\
-"import sugar        # collect, =>\n"\
-"import tables       # toTable\n\n\n"\
+echo -e "import std/algorithm    # sorted\n"\
+"import std/math         # sum\n"\
+"import std/sets         # intersection, toHashSet\n"\
+"import std/setutils     # toSet\n"\
+"import std/sequtils     # map\n"\
+"import std/strscans     # scanf\n"\
+"import std/strformat    # echo &\"{}\"\n"\
+"import std/strutils     # split\n"\
+"import std/sugar        # collect, =>\n"\
+"import std/tables       # toTable\n\n\n"\
 \
 "proc part1(data: string): int =\n"\
 "    return 0\n\n\n"\

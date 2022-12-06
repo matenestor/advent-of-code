@@ -30,7 +30,7 @@ and the `samples/` directories are. The program searches the input data there.
   - array processing with multiple paradigms Nim offers
   - `collect` and `=>` macros
 - Day 2: custom types and enums
-- Day 3: HashSets from the `sets` module
+- Day 3: `HashSets` from the `sets` module
 - Day 4:
   - split a string on multiple characters
   - override a built-in operator by creating my own `func` or `proc`
@@ -45,6 +45,13 @@ and the `samples/` directories are. The program searches the input data there.
   - `foldl` from `sequtils` can convert a `seq[char]` to a string
   - assigning a table creates a copy of it; in order to keep the same instance
     use `newTable`
+- Day 6:
+  - `toSet` from the `setutils` module; useful to convert e.g. strings or 
+    sequences to a set of characters
+  - the implicit `result` variable available in every procedure with a return
+    type of the procedure; it is automatically returned when the procedure exits,
+    unless the `return` is used
+
 
 - Along the way:
   - `high` and `low` procs; useful when a collection is not indexed 0..N
