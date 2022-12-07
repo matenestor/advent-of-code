@@ -51,6 +51,18 @@ and the `samples/` directories are. The program searches the input data there.
   - the implicit `result` variable available in every procedure with a return
     type of the procedure; it is automatically returned when the procedure exits,
     unless the `return` is used
+- Day 7:
+  - `scanf`: use `$w` to match an ASCII identifier, because `$s` is for
+    **s**kipping an optional whitespace... and `$$` to match a dollar sign, 
+    `$.` to match end of a string, `$+` to match everything until the following
+    token was found (e.g. `$w` cannot match "a.txt" but `$+$.` can)
+  - the difference between `object` and `ref object`, and how to use an attribute
+    of type `T` in an object of the same type `T`
+  - the `nil` type and `isNil` check
+  - dereference object for `echo` with `[]` (e.g. `echo refObj[]` will print its fields)
+  - object instantiation with `Obj()` and `new Obj`; the former can be used to
+    initialize attributes, the latter just uses default values, both approaches
+    allocates the object on heap (rumors about removing `new` in Nim 2.0)
 
 
 - Along the way:
