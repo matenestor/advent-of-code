@@ -63,6 +63,8 @@ and the `samples/` directories are. The program searches the input data there.
   - object instantiation with `Obj()` and `new Obj`; the former can be used to
     initialize attributes, the latter just uses default values, both approaches
     allocates the object on heap (rumors about removing `new` in Nim 2.0)
+  - echo character/string multiple times with `'-'.repeat(3)`
+  - use a proc as a proc parameter
 
 
 - Along the way:
