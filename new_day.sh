@@ -11,11 +11,11 @@ fi
 #	input_type="$2"
 #fi
 
-touch "samples/sample_$1.txt"
-echo "samples/sample_$1.txt"
+touch "samples/sample$1.txt"
+echo "samples/sample$1.txt"
 
-touch "inputs/input_$1.txt"
-echo "inputs/input_$1.txt"
+touch "inputs/input$1.txt"
+echo "inputs/input$1.txt"
 
 
 echo -e "import std/[\n"\
@@ -38,13 +38,13 @@ echo -e "import std/[\n"\
 "    return 0\n\n\n"\
 \
 "when isMainModule:\n"\
-"    let data_sample: string = readFile(\"samples/sample_$1.txt\").strip()\n"\
-"    let data_input: string = readFile(\"inputs/input_$1.txt\").strip()\n\n"\
+"    let dataSample: string = readFile(\"samples/sample$1.txt\").strip()\n"\
+"    let dataInput: string = readFile(\"inputs/input$1.txt\").strip()\n\n"\
 ""\
-"    echo &\"Part 1 sample: {part1(data_sample)}\"\n"\
-"    #echo &\"Part 1 input:  {part1(data_input)}\"\n"\
-"    #echo &\"Part 2 sample: {part2(data_sample)}\"\n"\
-"    #echo &\"Part 2 input:  {part2(data_input)}\"\n"\
+"    echo &\"Part 1 sample: {part1(dataSample)}\"\n"\
+"    #echo &\"Part 1 input:  {part1(dataInput)}\"\n"\
+"    #echo &\"Part 2 sample: {part2(dataSample)}\"\n"\
+"    #echo &\"Part 2 input:  {part2(dataInput)}\"\n"\
 > "day$1.nim"
 echo "day$1.nim"
 

@@ -65,12 +65,19 @@ and the `samples/` directories are. The program searches the input data there.
     allocates the object on heap (rumors about removing `new` in Nim 2.0)
   - echo character/string multiple times with `'-'.repeat(3)`
   - use a proc as a proc parameter
+- Day 8:
+  - overriding `items` iterator makes it possible to iterate custom types just
+    with `for in`
+  - override `$` for pretty printing custom types
+  - Nim style guide prefers camelCamel case over snake_case
 
 
 - Along the way:
-  - `high` and `low` procs; useful when a collection is not indexed 0..N
+  - `high` and `low` procs; useful when a collection is not indexed 0..N,
+    also to get max and min value of e.g. int `high(int) = ...`
   - `mpairs`, `mvalues` etc.; iterators that iterate over elements that
     can be changed
-  - `mapIt` (and other `xIt`) from `sequtils`; returns a new sequence, useful
-    when a collection need to change the types of its elements
+  - a template `mapIt` (and other `xIt`) from `sequtils`; returns a new sequence,
+    useful when a collection need to change the types of its elements, it also
+    injects a variable `it` that can be used to access the single elements
    
