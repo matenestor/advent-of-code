@@ -70,6 +70,9 @@ and the `samples/` directories are. The program searches the input data there.
     with `for in`
   - override `$` for pretty printing custom types
   - Nim style guide prefers camelCamel case over snake_case
+- Day 9:
+  - in order to use `typeof()` inside string format, it needs to be used with 
+    a string conversion `$` operator: `&"{$typeof(num)}: {num}`
 
 
 - Along the way:
@@ -80,5 +83,11 @@ and the `samples/` directories are. The program searches the input data there.
   - a template `mapIt` (and other `xIt`) from `sequtils`; returns a new sequence,
     useful when a collection need to change the types of its elements, it also
     injects a variable `it` that can be used to access the single elements
-  - Nim has `auto` type
-   
+  - Nim has an `auto` type
+  - a `block` statement can be used to break out of nested loops with
+    ```nim
+    block loops:
+      while true:
+        while true:
+          break loops
+    ```
