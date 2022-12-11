@@ -80,4 +80,5 @@ and the `samples/` directories are. The program searches the input data there.
   - a template `mapIt` (and other `xIt`) from `sequtils`; returns a new sequence,
     useful when a collection need to change the types of its elements, it also
     injects a variable `it` that can be used to access the single elements
+  - Nim has `auto` type
    
