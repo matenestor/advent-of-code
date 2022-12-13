@@ -24,6 +24,20 @@ Make sure to execute the solution in the same directory where the `inputs/`
 and the `samples/` directories are. The program searches the input data there.
 
 
+## TODO
+
+- Day 7:
+  - try make a single `solve` proc that only traverses the tree and uses a callback proc
+  - implement the remaining Xorder tree traversing
+- Day 8:
+  - try to replace directional checks with template (using `untyped` so given
+    code is not evaluated)
+  - try dynamic programming approach
+- Day 9:
+  - get rid of `isOrthogonal`, `moveOrthogonal` and `moveDiagonal` procs, and
+    compute the required move as vectors or with sign function
+  - merge the solving procs into `solve` proc with an arbitrary long rope
+
 ## Learned
 
 - Day 1:
@@ -46,14 +60,14 @@ and the `samples/` directories are. The program searches the input data there.
   - assigning a table creates a copy of it; in order to keep the same instance
     use `newTable`
 - Day 6:
-  - `toSet` from the `setutils` module; useful to convert e.g. strings or 
+  - `toSet` from the `setutils` module; useful to convert e.g. strings or
     sequences to a set of characters
   - the implicit `result` variable available in every procedure with a return
     type of the procedure; it is automatically returned when the procedure exits,
     unless the `return` is used
 - Day 7:
   - `scanf`: use `$w` to match an ASCII identifier, because `$s` is for
-    **s**kipping an optional whitespace... and `$$` to match a dollar sign, 
+    **s**kipping an optional whitespace... and `$$` to match a dollar sign,
     `$.` to match end of a string, `$+` to match everything until the following
     token was found (e.g. `$w` cannot match "a.txt" but `$+$.` can)
   - the difference between `object` and `ref object`, and how to use an attribute
@@ -71,7 +85,7 @@ and the `samples/` directories are. The program searches the input data there.
   - override `$` for pretty printing custom types
   - Nim style guide prefers camelCamel case over snake_case
 - Day 9:
-  - in order to use `typeof()` inside string format, it needs to be used with 
+  - in order to use `typeof()` inside string format, it needs to be used with
     a string conversion `$` operator: `&"{$typeof(num)}: {num}`
 
 
