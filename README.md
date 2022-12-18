@@ -87,6 +87,14 @@ and the `samples/` directories are. The program searches the input data there.
 - Day 9:
   - in order to use `typeof()` inside string format, it needs to be used with
     a string conversion `$` operator: `&"{$typeof(num)}: {num}`
+- Day 11:
+  - `strscans` and `scanf` -- again, `$i` for a decimal integer, not `$d`, and
+    as a reminder `$w` for a letter (and a number!), not `$s`. Also, it is a dollar
+    `$` that prefixes, not a percentage sign `%`
+  - currying in Nim and using a proc/func as an object attribute
+  - use `mitems` to iterate sequences and change the items inside
+  - a simple lookup table just with ordinal types can be created like
+    `var table = ['a': 21, 'b': 42]` without importing `std/tables` and converting `.toTable`
 
 
 - Along the way:

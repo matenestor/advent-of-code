@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 if [ -z "$1" ]; then
-	echo -e "Day number required!\nUsage: ./new_day.sh <day-number>"
+	echo -e "Day number required!\nUsage: ./new_day.sh <day-number> [input-datatype]"
 	exit 1
 fi
 
-#if [ -z "$2" ]; then
-#	input_type="Any"
-#else
-#	input_type="$2"
-#fi
+if [ -z "$2" ]; then
+	input_type="untyped #TODO "
+else
+	input_type="$2"
+fi
 
 touch "samples/sample$1.txt"
 echo "samples/sample$1.txt"
@@ -31,15 +31,18 @@ echo -e "import std/[\n"\
 "    tables,       # toTable\n"\
 "]\n\n\n"\
 \
-"proc part1(data: string): int =\n"\
+"proc transformData(data: string): $input_type =\n"\
+"    return\n\n\n"\
+\
+"proc part1(data: $input_type): int =\n"\
 "    return 0\n\n\n"\
 \
-"proc part2(data: string): int =\n"\
+"proc part2(data: $input_type): int =\n"\
 "    return 0\n\n\n"\
 \
 "when isMainModule:\n"\
-"    let dataSample: string = readFile(\"samples/sample$1.txt\").strip()\n"\
-"    let dataInput: string = readFile(\"inputs/input$1.txt\").strip()\n\n"\
+"    let dataSample: $input_type = transformData(readFile(\"samples/sample$1.txt\").strip())\n"\
+"    let dataInput: $input_type = transformData(readFile(\"inputs/input$1.txt\").strip())\n\n"\
 ""\
 "    echo &\"Part 1 sample: {part1(dataSample)}\"\n"\
 "    #echo &\"Part 1 input:  {part1(dataInput)}\"\n"\
