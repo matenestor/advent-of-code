@@ -72,6 +72,17 @@ part1 :: proc(data: Games) -> (result: int) {
 }
 
 part2 :: proc(data: Games) -> (result: int) {
+	for game in data {
+		red, green, blue := 0, 0, 0
+
+		for set in game {
+			if set.red   > red   { red = set.red }
+			if set.green > green { green = set.green }
+			if set.blue  > blue  { blue = set.blue }
+		}
+
+		result += red * green * blue
+	}
 	return
 }
 
@@ -79,9 +90,9 @@ main :: proc() {
 	data_sample := open_and_parse(FILENAME_SAMPLE)
 	data_input := open_and_parse(FILENAME_INPUT)
 
-	fmt.printf("part 1 sample (8): %d\n", part1(data_sample))
+	//fmt.printf("part 1 sample (8): %d\n", part1(data_sample))
     fmt.printf("part 1 input: %d\n", part1(data_input))
-	//fmt.printf("part 2 sample (): %d\n", part2(data_sample))
-	//fmt.printf("part 2 input: %d\n", part2(data_input))
+	//fmt.printf("part 2 sample (2286): %d\n", part2(data_sample))
+	fmt.printf("part 2 input: %d\n", part2(data_input))
 }
 
