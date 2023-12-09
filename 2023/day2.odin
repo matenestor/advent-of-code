@@ -10,14 +10,32 @@ import "core:strconv"
 FILENAME_SAMPLE :: "inputs/sample2.txt"
 FILENAME_INPUT :: "inputs/input2.txt"
 
-
-Game :: struct {
+Set :: struct {
 	red: int,
 	green: int,
 	blue: int,
 }
 
-open_and_parse :: proc(filename: string) -> (result: [dynamic]Game) {
+Games :: [dynamic][dynamic]Set
+
+
+parse_set :: proc(set: string) -> (result: Set) {
+	for item_str in strings.split(strings.trim(set, " "), ", ") {
+		item := strings.split(item_str, " ")
+		amount, _ := strconv.parse_int(item[0])
+		color: string = item[1]
+
+		switch {
+			case color == "red":   result.red = amount
+			case color == "green": result.green = amount
+			case color == "blue":  result.blue = amount
+			case: fmt.panicf("Unknown color [%s]", color)
+		}
+	}
+	return
+}
+
+open_and_parse :: proc(filename: string) -> (result: Games) {
 	data, ok := os.read_entire_file_from_filename(filename)
 	if !ok {
 		fmt.printf("Unable to open file [%s]!\n", filename)
@@ -25,44 +43,35 @@ open_and_parse :: proc(filename: string) -> (result: [dynamic]Game) {
 	}
 
 	split_lines := strings.split_lines(strings.trim(string(data), "\n"))
-	for line in split_lines {
-		splits := []string{": ", ", ", "; "}
-		// [5:] to cut out "Game "
-		sets := strings.split_multi(line[5:], splits)
 
-		game := Game{}
+	for line, index in split_lines {
+		game := strings.split(line, ":")[1]
+		append(&result, cast([dynamic]Set) {})
 
-		// [1:] to cut omit the remaing number after "Game <number>:"
-		for set_str in sets[1:] {
-			set := strings.split(set_str, " ")
-			amount, _ := strconv.parse_int(set[0])
-			color: string = set[1]
+		for set_str in strings.split(game, ";") {
+			set := parse_set(set_str)
+			append(&result[index], set)
+		}
+	}
 
-			switch {
-				case color == "red":   game.red += amount
-				case color == "green": game.green += amount
-				case color == "blue":  game.blue += amount
-				case: panic("Unreachable: unknown colow")
+	return
+}
+
+part1 :: proc(data: Games) -> (result: int) {
+	loop: for game, index in data {
+		for set in game {
+			if set.red > 12 || set.green > 13 || set.blue > 14 {
+				// impossible game
+				continue loop
 			}
 		}
 
-		append(&result, game)
-	}
-
-	return
-}
-
-part1 :: proc(data: [dynamic]Game) -> (result: int) {
-	for game, index in data {
-		if game.red <= 12 && game.green <= 13 && game.blue <= 14 {
-			//fmt.printf("%d %v\n", index+1, game)
-			result += index + 1
-		}
+		result += index + 1
 	}
 	return
 }
 
-part2 :: proc(data: [dynamic]Game) -> (result: int) {
+part2 :: proc(data: Games) -> (result: int) {
 	return
 }
 
