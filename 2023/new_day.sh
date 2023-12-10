@@ -20,7 +20,7 @@ else
 fi
 
 if [ -z "$3" ]; then
-	INPUT_TYPE="any /*#TODO*/ "
+	INPUT_TYPE="any /*#TODO*/"
 else
 	INPUT_TYPE="$3"
 fi
@@ -37,6 +37,8 @@ FILENAME_INPUT :: \"inputs/input$DAY.txt\"
 
 
 parse_data :: proc(data_str: string) -> (result: $INPUT_TYPE) {
+	for line in strings.split_lines(strings.trim(string(data_str), \"\\n\")) {
+	}
 	return
 }
 
