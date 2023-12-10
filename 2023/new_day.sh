@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ -z "$1" ]; then
-	echo -e "Day number required!\nUsage: ./new_day.sh <day-number> [input-datatype]"
+	echo -e "Day number required!\nUsage: ./new_day.sh <day-number> [sample-result] [input-datatype]"
 	exit 1
 fi
 
@@ -14,10 +14,17 @@ echo  "inputs/input$DAY.txt"
 
 
 if [ -z "$2" ]; then
+	SAMPLE_RESULT=""
+else
+	SAMPLE_RESULT="$2"
+fi
+
+if [ -z "$3" ]; then
 	INPUT_TYPE="any /*#TODO*/ "
 else
-	INPUT_TYPE="$2"
+	INPUT_TYPE="$3"
 fi
+
 
 TEMPLATE="package aoc2023
 
@@ -45,7 +52,7 @@ main :: proc() {
 	data_sample := parse_data(#load(FILENAME_SAMPLE))
 	//data_input := parse_data(#load(FILENAME_INPUT))
 
-	fmt.printf(\"part 1 sample (): %d\\n\", part1(data_sample))
+	fmt.printf(\"part 1 sample ($SAMPLE_RESULT): %d\\n\", part1(data_sample))
 	//fmt.printf(\"part 1 input: %d\\n\", part1(data_input))
 	//fmt.printf(\"part 2 sample (): %d\\n\", part2(data_sample))
 	//fmt.printf(\"part 2 input: %d\\n\", part2(data_input))
