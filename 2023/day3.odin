@@ -18,13 +18,11 @@ EngineSchema :: map[string][dynamic]Coords
 
 
 parse_number_width :: proc(s: string) -> (width: int) {
-	char := s[width]
-	for char >= '0' && char <= '9' {
+	for s[width] >= '0' && s[width] <= '9' {
 		width += 1
 		if width == len(s) {
 			break
 		}
-		char = s[width]
 	}
 	return
 }
