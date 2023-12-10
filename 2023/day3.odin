@@ -53,7 +53,7 @@ parse_data :: proc(data_str: string) -> (result: EngineSchema) {
 			}
 
 			if rune(char) in symbols {
-				append(&result["symbols"], Coords{x, y, 1, 0})
+				append(&result["symbols"], Coords{x, y, 1, int(char)})
 				x += 1
 			}
 		}
@@ -88,6 +88,38 @@ part1 :: proc(data: EngineSchema) -> (result: int) {
 }
 
 part2 :: proc(data: EngineSchema) -> (result: int) {
+	for symbol in data["symbols"] {
+		if symbol.number != '*' {
+			continue
+		}
+
+		gear_ratio, nums_found := 1, 0
+
+		for number in data["numbers"] {
+			// not the same or adjacent row
+			if abs(symbol.y - number.y) > 1 {
+				continue
+			}
+			// a number is to far right
+			if symbol.x < number.x && abs(symbol.x - number.x) > 1 {
+				continue
+			}
+			// a number is to far left
+			// NOTE additional problems would occur with number.width > 3 in the puzzle input
+			if (abs(symbol.x - (number.x + number.width - 1)) > 1
+				&& abs(symbol.x - number.x) > 1) {
+				continue
+			}
+
+			gear_ratio *= number.number
+			nums_found += 1
+		}
+
+		if nums_found >= 2 {
+			result += gear_ratio
+		}
+	}
+
 	return
 }
 
@@ -97,8 +129,7 @@ main :: proc() {
 
 	fmt.printf("part 1 sample (4361): %d\n", part1(data_sample))
 	fmt.printf("part 1 input: %d\n", part1(data_input))
-	//fmt.printf("part 2 sample (): %d\n", part2(data_sample))
-	//fmt.printf("part 2 input: %d\n", part2(data_input))
-
+	fmt.printf("part 2 sample (467835): %d\n", part2(data_sample))
+	fmt.printf("part 2 input: %d\n", part2(data_input))
 }
 
