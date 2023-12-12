@@ -8,7 +8,7 @@ import "core:strings"
 FILENAME_SAMPLE :: "inputs/sample5.txt"
 FILENAME_INPUT :: "inputs/input5.txt"
 
-MapKeys :: []string{
+MAP_KEYS :: []string{
 	"seed-to-soil",
 	"soil-to-fertilizer",
 	"fertilizer-to-water",
@@ -43,9 +43,9 @@ parse_ints :: proc(s: string) -> []int {
 	return ints
 }
 
-parse_map_instructions :: proc(instructions_str: ^string, foo: ^[dynamic]Instruction) {
+parse_map_instructions :: proc(inst_str: ^string, inst_array: ^[dynamic]Instruction) {
 	for {
-		numbers_str, _ := strings.split_iterator(instructions_str, "\n");
+		numbers_str, _ := strings.split_iterator(inst_str, "\n");
 		if numbers_str == "" do break
 
 		numbers := parse_ints(numbers_str)
@@ -57,13 +57,13 @@ parse_map_instructions :: proc(instructions_str: ^string, foo: ^[dynamic]Instruc
 			range = numbers[2],
 		}
 		// FIXME this leaks memory
-		append(foo, instruction)
+		append(inst_array, instruction)
 	}
 }
 
 parse_data :: proc(data_str: string) -> (result: Almanac) {
 	// initialize all map keys
-	for map_key in MapKeys do result.instruction_maps[map_key] = {}
+	for map_key in MAP_KEYS do result.instruction_maps[map_key] = {}
 
 	// parse seed numbers
 	s := strings.trim(string(data_str), "\n")
@@ -84,18 +84,18 @@ parse_data :: proc(data_str: string) -> (result: Almanac) {
 // ----------------------------------------------------------------------------
 
 transform_input :: proc(input, dst, src, range: int) -> (int, bool) {
-	if !(src <= input && input < src + range) {
-		return -1, false
+	if src <= input && input < src + range {
+		return input - src + dst, true
 	}
 	else {
-		return input - src + dst, true
+		return -1, false
 	}
 }
 
 get_seed_location :: proc(seed: int, almanac_maps: AlmanacMaps) -> int {
 	input := seed
 
-	for map_key in MapKeys {
+	for map_key in MAP_KEYS {
 		for inst in almanac_maps[map_key] {
 			next_input, ok := transform_input(
 				input, inst.destination, inst.source, inst.range
@@ -119,23 +119,31 @@ part1 :: proc(data: Almanac) -> (result: int = 4294967296 /* max uint32 */) {
 	return
 }
 
-// ----------------------------------------------------------------------------
+part2 :: proc(data: Almanac) -> (result: int = 4294967296 /* max uint32 */) {
+	for i := 0; i < len(data.seeds); i += 2 {
+		for seed in data.seeds[i]..<data.seeds[i] + data.seeds[i+1] {
 
-part2 :: proc(data: Almanac) -> (result: int) {
+			if seed % 1048576 == 0 do fmt.printf("%d %d %d\n", i, seed, result)
+
+			location := get_seed_location(seed, data.instruction_maps)
+			if location < result do result = location
+		}
+	}
+
 	return
 }
 
 main :: proc() {
-	data_sample := parse_data(#load(FILENAME_SAMPLE))
+	//data_sample := parse_data(#load(FILENAME_SAMPLE))
 	data_input := parse_data(#load(FILENAME_INPUT))
 
-	fmt.printf("part 1 sample (35): %d\n", part1(data_sample))
-	fmt.printf("part 1 input: %d\n", part1(data_input))
-	//fmt.printf("part 2 sample (): %d\n", part2(data_sample))
-	//fmt.printf("part 2 input: %d\n", part2(data_input))
+	//fmt.printf("part 1 sample (35): %d\n", part1(data_sample))
+	//fmt.printf("part 1 input: %d\n", part1(data_input))
+	//fmt.printf("part 2 sample (46): %d\n", part2(data_sample))
+	fmt.printf("part 2 input: %d\n", part2(data_input))
 
-	delete(data_sample.seeds)
-	delete(data_sample.instruction_maps)
+	//delete(data_sample.seeds)
+	//delete(data_sample.instruction_maps)
 	delete(data_input.seeds)
 	delete(data_input.instruction_maps)
 }
