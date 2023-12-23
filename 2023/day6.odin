@@ -1,6 +1,7 @@
 package aoc2023
 
 import "core:fmt"
+import "core:math"
 import "core:slice"
 import "core:strings"
 import "core:strconv"
@@ -51,7 +52,7 @@ parse_data :: proc(data_str: string) -> (result: [dynamic]Race) {
 }
 
 part1 :: proc(data: [dynamic]Race) -> (result: int = 1) {
-	for race, i in data {
+	for race in data {
 		ways_to_win := 0
 
 		for secs_held in 1..<race.time {
@@ -65,7 +66,38 @@ part1 :: proc(data: [dynamic]Race) -> (result: int = 1) {
 	return
 }
 
+number_length :: proc(number: int) -> f32 {
+	num_len := int(math.log10(f32(number)) + 1)
+	return f32(num_len)
+}
+
+get_actual_values :: proc(data: [dynamic]Race) -> (int, int) {
+	// convert input numbers from all races to a single number
+	// (I am not writing another parsing for that..)
+
+	actual_time, actual_distance := data[0].time, data[0].distance
+
+	for i in 1..<len(data) {
+		shift := int(math.pow10_f32(number_length(data[i].time)))
+		actual_time *= shift
+		actual_time += data[i].time
+
+		shift = int(math.pow10_f32(number_length(data[i].distance)))
+		actual_distance *= shift
+		actual_distance += data[i].distance
+	}
+
+	return actual_time, actual_distance
+}
+
 part2 :: proc(data: [dynamic]Race) -> (result: int) {
+	actual_time, actual_distance := get_actual_values(data)
+
+	for secs_held in 1..<actual_time {
+		distance := secs_held * (actual_time - secs_held)
+		if distance > actual_distance do result += 1
+	}
+
 	return
 }
 
@@ -75,8 +107,8 @@ main :: proc() {
 
 	fmt.printf("part 1 sample (288): %d\n", part1(data_sample))
 	fmt.printf("part 1 input: %d\n", part1(data_input))
-	//fmt.printf("part 2 sample (): %d\n", part2(data_sample))
-	//fmt.printf("part 2 input: %d\n", part2(data_input))
+	fmt.printf("part 2 sample (71503): %d\n", part2(data_sample))
+	fmt.printf("part 2 input: %d\n", part2(data_input))
 
 	delete(data_sample)
 }
