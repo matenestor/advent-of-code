@@ -37,7 +37,7 @@ FILENAME_INPUT :: \"inputs/input$DAY.txt\"
 
 
 parse_data :: proc(data_str: string) -> (result: $INPUT_TYPE) {
-	// redefine, other Odin can't take a pointer for the iterator
+	// redefine, otherwise Odin can't take a pointer for the iterator
 	data_str := data_str
 
 	for line in strings.split_lines_iterator(&data_str) {
