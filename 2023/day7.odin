@@ -130,9 +130,9 @@ The original becomes:
 */
 normalize_card :: proc(c: u8) -> u8 {
 	switch c {
-		case 'T': return 'I'  // T < J <=> I < J
-		case 'K': return 'R'  // K > Q <=> R > Q
-		case 'A': return 'S'  // A > K <=> S > K
+		case 'T': return 'I'
+		case 'K': return 'R'
+		case 'A': return 'S'
 		case: return c
 	}
 }
@@ -184,11 +184,9 @@ init_hand_type_with_jokers :: proc(hand: ^Hand) {
 	cards_amounts := hand^.cards_amounts[:]
 
 	switch {
-	// OK
 	case slice.contains(cards_amounts, 5):
 		hand^.hand_type = HandType.FiveOfAKind
 
-	// OK
 	case slice.contains(cards_amounts, 4):
 		jokers_amount := hand^.cards_amounts[JokerIdx]
 
@@ -200,7 +198,6 @@ init_hand_type_with_jokers :: proc(hand: ^Hand) {
 			hand^.hand_type = HandType.FourOfAKind
 		}
 
-	// OK
 	case slice.contains(cards_amounts, 3):
 		// 3J and 2:	5oK
 		// 3J (and 1):	4oK
@@ -224,7 +221,6 @@ init_hand_type_with_jokers :: proc(hand: ^Hand) {
 			hand^.hand_type = HandType.ThreeOfAKind
 		}
 
-	// OK
 	case slice.contains(cards_amounts, 2) && slice.count(cards_amounts, 2) == 2:
 		jokers_amount := hand^.cards_amounts[JokerIdx]
 
@@ -239,7 +235,6 @@ init_hand_type_with_jokers :: proc(hand: ^Hand) {
 			hand^.hand_type = HandType.TwoPair
 		}
 
-	// OK
 	case slice.contains(cards_amounts, 2):
 		jokers_amount := hand^.cards_amounts[JokerIdx]
 
@@ -251,7 +246,6 @@ init_hand_type_with_jokers :: proc(hand: ^Hand) {
 			hand^.hand_type = HandType.OnePair
 		}
 
-	// OK
 	case:
 		if hand^.cards_amounts[JokerIdx] == 1 {
 			hand^.hand_type = HandType.OnePair
@@ -262,12 +256,13 @@ init_hand_type_with_jokers :: proc(hand: ^Hand) {
 	}
 }
 
+// see doc string at 'normalize_card'
 normalize_card_with_jokers :: proc(c: u8) -> u8 {
 	switch c {
 		case 'J': return '0'  // J is the weakest card as a joker
-		case 'T': return 'I'  // T < J <=> I < J
-		case 'K': return 'R'  // K > Q <=> R > Q
-		case 'A': return 'S'  // A > K <=> S > K
+		case 'T': return 'I'
+		case 'K': return 'R'
+		case 'A': return 'S'
 		case: return c
 	}
 }
