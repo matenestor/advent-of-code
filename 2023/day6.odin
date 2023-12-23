@@ -93,10 +93,32 @@ get_actual_values :: proc(data: [dynamic]Race) -> (int, int) {
 part2 :: proc(data: [dynamic]Race) -> (result: int) {
 	actual_time, actual_distance := get_actual_values(data)
 
-	for secs_held in 1..<actual_time {
-		distance := secs_held * (actual_time - secs_held)
-		if distance > actual_distance do result += 1
+	// 1. brute force
+	//for secs_held in 1..<actual_time {
+	//	distance := secs_held * (actual_time - secs_held)
+	//	if distance > actual_distance do result += 1
+	//}
+
+	// 2. go from sides only until intersection
+	distance, i := 0, 1
+	for distance < actual_distance {
+		distance = i * (actual_time - i)
+		i += 1
 	}
+	result -= (i - 1)
+
+	distance, i = 0, actual_time
+	for distance < actual_distance {
+		distance = i * (actual_time - i)
+		i -= 1
+	}
+	result += (i + 1)
+
+	// plus one, because the range is inclusive
+	result += 1
+
+	// 3. I could also solve the quadratic formula equation,
+	//    but this runs fast enough..
 
 	return
 }
@@ -106,10 +128,11 @@ main :: proc() {
 	data_input := parse_data(#load(FILENAME_INPUT))
 
 	fmt.printf("part 1 sample (288): %d\n", part1(data_sample))
-	fmt.printf("part 1 input: %d\n", part1(data_input))
+	fmt.printf("part 1 input: %d\n", part1(data_input))  // 252000
 	fmt.printf("part 2 sample (71503): %d\n", part2(data_sample))
-	fmt.printf("part 2 input: %d\n", part2(data_input))
+	fmt.printf("part 2 input: %d\n", part2(data_input))  // 36992486
 
 	delete(data_sample)
+	delete(data_input)
 }
 
