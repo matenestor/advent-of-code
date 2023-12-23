@@ -37,7 +37,10 @@ FILENAME_INPUT :: \"inputs/input$DAY.txt\"
 
 
 parse_data :: proc(data_str: string) -> (result: $INPUT_TYPE) {
-	for line in strings.split_lines(strings.trim(string(data_str), \"\\n\")) {
+	// redefine, other Odin can't take a pointer for the iterator
+	data_str := data_str
+
+	for line in strings.split_lines_iterator(&data_str) {
 	}
 	return
 }
@@ -58,6 +61,9 @@ main :: proc() {
 	//fmt.printf(\"part 1 input: %d\\n\", part1(data_input))
 	//fmt.printf(\"part 2 sample (): %d\\n\", part2(data_sample))
 	//fmt.printf(\"part 2 input: %d\\n\", part2(data_input))
+
+	delete(data_sample)
+	//delete(data_input)
 }
 "
 echo "$TEMPLATE" > "day$DAY.odin"
