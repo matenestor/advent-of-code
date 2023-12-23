@@ -28,6 +28,8 @@ Hand :: struct {
 	hand_type: HandType
 }
 
+JokerIdx :: 9
+
 parse_data :: proc(data_str: string) -> []Hand {
 	// redefine, other Odin can't take a pointer for the iterator
 	data_str := data_str
@@ -61,7 +63,7 @@ parse_data :: proc(data_str: string) -> []Hand {
 	return result
 }
 
-//count_cards_amounts :: proc(cards: string, cards_amounts: [13]int) {
+// TODO count_cards_amounts :: proc(cards: string, cards_amounts: [13]int) {
 count_cards_amounts :: proc(hand: ^Hand) {
 	for card in hand^.cards {
 		switch card {
@@ -75,6 +77,8 @@ count_cards_amounts :: proc(hand: ^Hand) {
 		}
 	}
 }
+
+// ===== PART 1 ===============================================================
 
 init_hand_type :: proc(hand: ^Hand) {
 	// TODO how to use array in slice module procs?
@@ -98,11 +102,8 @@ init_hand_type :: proc(hand: ^Hand) {
 	else if slice.contains(cards_amounts, 2)  {
 		hand^.hand_type = HandType.OnePair
 	}
-	else if slice.contains(cards_amounts, 1)  {
-		hand^.hand_type = HandType.HighCard
-	}
 	else {
-		panic("Unreachable")
+		hand^.hand_type = HandType.HighCard
 	}
 }
 
@@ -171,10 +172,138 @@ part1 :: proc(data: []Hand) -> (result: int) {
 		result += (i+1) * data[i].bid
 	}
 
+	// data had been cloned in here
+	delete(data)
 	return
 }
 
+// ===== PART 2 ===============================================================
+
+init_hand_type_with_jokers :: proc(hand: ^Hand) {
+	// TODO how to use array in slice module procs?
+	cards_amounts := hand^.cards_amounts[:]
+
+	switch {
+	// OK
+	case slice.contains(cards_amounts, 5):
+		hand^.hand_type = HandType.FiveOfAKind
+
+	// OK
+	case slice.contains(cards_amounts, 4):
+		jokers_amount := hand^.cards_amounts[JokerIdx]
+
+		// either four, or one joker card; in both cases it is a five of a kind
+		if jokers_amount == 4 || jokers_amount == 1 {
+			hand^.hand_type = HandType.FiveOfAKind
+		}
+		else {
+			hand^.hand_type = HandType.FourOfAKind
+		}
+
+	// OK
+	case slice.contains(cards_amounts, 3):
+		// 3J and 2:	5oK
+		// 3J (and 1):	4oK
+		// 2J and 3:	5oK
+		// 1J and 3:	4oK
+		// 3 and 2:		FH
+		// _:			3oK
+
+		jokers_amount := hand^.cards_amounts[JokerIdx]
+
+		if (jokers_amount == 3 && slice.contains(cards_amounts, 2)) || jokers_amount == 2 {
+			hand^.hand_type = HandType.FiveOfAKind
+		}
+		else if jokers_amount == 3 || jokers_amount == 1 {
+			hand^.hand_type = HandType.FourOfAKind
+		}
+		else if slice.contains(cards_amounts, 2) {
+			hand^.hand_type = HandType.FullHouse
+		}
+		else {
+			hand^.hand_type = HandType.ThreeOfAKind
+		}
+
+	// OK
+	case slice.contains(cards_amounts, 2) && slice.count(cards_amounts, 2) == 2:
+		jokers_amount := hand^.cards_amounts[JokerIdx]
+
+		if jokers_amount == 2 {
+			hand^.hand_type = HandType.FourOfAKind
+		}
+		else if jokers_amount == 1 {
+			// one joker and two pairs of other cards is a full house
+			hand^.hand_type = HandType.FullHouse
+		}
+		else {
+			hand^.hand_type = HandType.TwoPair
+		}
+
+	// OK
+	case slice.contains(cards_amounts, 2):
+		jokers_amount := hand^.cards_amounts[JokerIdx]
+
+		// either two, or one joker card; in both cases it is a three of a kind
+		if jokers_amount == 2 || jokers_amount == 1 {
+			hand^.hand_type = HandType.ThreeOfAKind
+		}
+		else {
+			hand^.hand_type = HandType.OnePair
+		}
+
+	// OK
+	case:
+		if hand^.cards_amounts[JokerIdx] == 1 {
+			hand^.hand_type = HandType.OnePair
+		}
+		else {
+			hand^.hand_type = HandType.HighCard
+		}
+	}
+}
+
+normalize_card_with_jokers :: proc(c: u8) -> u8 {
+	switch c {
+		case 'J': return '0'  // J is the weakest card as a joker
+		case 'T': return 'I'  // T < J <=> I < J
+		case 'K': return 'R'  // K > Q <=> R > Q
+		case 'A': return 'S'  // A > K <=> S > K
+		case: return c
+	}
+}
+
+sort_cards_with_jokers :: proc(a, b: Hand) -> bool {
+	if a.hand_type != b.hand_type do return a.hand_type < b.hand_type
+
+	a_card: u8 = '0'
+	b_card: u8 = '0'
+	for i in 0..<5 {
+		if a.cards[i] == b.cards[i] do continue
+
+		a_card = normalize_card_with_jokers(a.cards[i])
+		b_card = normalize_card_with_jokers(b.cards[i])
+		break
+	}
+
+	return a_card < b_card
+}
+
 part2 :: proc(data: []Hand) -> (result: int) {
+	for i in 0..<len(data) {
+		hand := data[i]
+		count_cards_amounts(&hand)
+		init_hand_type_with_jokers(&hand)
+		data[i] = hand
+	}
+
+	slice.sort_by(data, sort_cards_with_jokers)
+
+	for i in 0..<len(data) {
+		result += (i+1) * data[i].bid
+	}
+
+	// data had been cloned in here
+	delete(data)
 	return
 }
 
@@ -182,10 +311,10 @@ main :: proc() {
 	data_sample := parse_data(#load(FILENAME_SAMPLE))
 	data_input := parse_data(#load(FILENAME_INPUT))
 
-	fmt.printf("part 1 sample (6440): %d\n", part1(data_sample))
-	fmt.printf("part 1 input: %d\n", part1(data_input))  // 253866470
-	//fmt.printf("part 2 sample (): %d\n", part2(data_sample))
-	//fmt.printf("part 2 input: %d\n", part2(data_input))
+	fmt.printf("part 1 sample (6440): %d\n", part1(slice.clone(data_sample)))
+	fmt.printf("part 1 input: %d\n", part1(slice.clone(data_input)))  // 253866470
+	fmt.printf("part 2 sample (5905): %d\n", part2(slice.clone(data_sample)))
+	fmt.printf("part 2 input: %d\n", part2(slice.clone(data_input)))  // 254494947
 
 	delete(data_sample)
 	delete(data_input)
