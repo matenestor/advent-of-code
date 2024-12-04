@@ -1,6 +1,3 @@
-local inspect = require("inspect")
-
-
 FILENAME_INPUT = "inputs/input4.txt"
 --FILENAME_INPUT = "inputs/sample4.txt"
 
@@ -23,7 +20,7 @@ function parse_data(filename)
 	return data
 end
 
--- neighbours 
+-- part 1 neighbours 
 local nbs = {
 	{-1, -1}, {-1, 0}, {-1, 1},
 	{ 0, -1},          { 0, 1},
@@ -80,8 +77,47 @@ function part1(data)
 	return res
 end
 
+-- part 2 neighbours 
+local nbs2 = {
+	{-1, -1}, {-1, 1},
+	{ 1, -1}, { 1, 1},
+}
+
+function parse_xmas(data, i, j)
+	for _, nb_pos in ipairs(nbs2) do
+		local ni, nj = table.unpack(nb_pos)
+
+		if not is_within_bounds(i+ni, j+nj, #data, #data[1]) then
+			-- one of the directions is out of bounds, so there is no X around this A
+			return false
+		end
+	end
+
+	local top_left  = data[i-1][j-1]
+	local top_right = data[i-1][j+1]
+	local btm_left  = data[i+1][j-1]
+	local btm_right = data[i+1][j+1]
+
+	-- basically explicitly written:
+	-- local chars = { top_left, top_right, btm_left, btm_right }
+	-- chars.M == 2 and chars.S == 2 and chars[1] ~= chars[4]
+	-- (chars[1] ~= chars[4] checks that Ms or Ss are not on the same diagonal)
+
+	local ms_diagonal_1 = (top_left  == "M" and btm_right == "S") or (top_left  == "S" and btm_right == "M")
+	local ms_diagonal_2 = (top_right == "M" and btm_left  == "S") or (top_right == "S" and btm_left  == "M")	
+	return ms_diagonal_1 and ms_diagonal_2
+end
+
 function part2(data)
 	local res = 0
+
+	for i = 1, #data do
+		for j = 1, #data[i] do
+			if data[i][j] == "A" and parse_xmas(data, i, j) then
+				res = res + 1
+			end
+		end
+	end
 
 	return res
 end
@@ -89,5 +125,5 @@ end
 
 local data = parse_data(FILENAME_INPUT)
 print("part 1 (18):", part1(data))
---print("part 2 ():", part2(data))
+print("part 2 (9):", part2(data))
 
