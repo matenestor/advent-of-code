@@ -77,22 +77,7 @@ function part1(data)
 	return res
 end
 
--- part 2 neighbours 
-local nbs2 = {
-	{-1, -1}, {-1, 1},
-	{ 1, -1}, { 1, 1},
-}
-
 function parse_xmas(data, i, j)
-	for _, nb_pos in ipairs(nbs2) do
-		local ni, nj = table.unpack(nb_pos)
-
-		if not is_within_bounds(i+ni, j+nj, #data, #data[1]) then
-			-- one of the directions is out of bounds, so there is no X around this A
-			return false
-		end
-	end
-
 	local top_left  = data[i-1][j-1]
 	local top_right = data[i-1][j+1]
 	local btm_left  = data[i+1][j-1]
@@ -105,14 +90,15 @@ function parse_xmas(data, i, j)
 
 	local ms_diagonal_1 = (top_left  == "M" and btm_right == "S") or (top_left  == "S" and btm_right == "M")
 	local ms_diagonal_2 = (top_right == "M" and btm_left  == "S") or (top_right == "S" and btm_left  == "M")	
+
 	return ms_diagonal_1 and ms_diagonal_2
 end
 
 function part2(data)
 	local res = 0
 
-	for i = 1, #data do
-		for j = 1, #data[i] do
+	for i = 2, #data-1 do
+		for j = 2, #data[i]-1 do
 			if data[i][j] == "A" and parse_xmas(data, i, j) then
 				res = res + 1
 			end
