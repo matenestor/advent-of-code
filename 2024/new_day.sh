@@ -19,10 +19,7 @@ else
 	SAMPLE_RESULT="$2"
 fi
 
-TEMPLATE="local inspect = require(\"inspect\")
-
-
---FILENAME_INPUT = \"inputs/input$DAY.txt\"
+TEMPLATE="--FILENAME_INPUT = \"inputs/input$DAY.txt\"
 FILENAME_INPUT = \"inputs/sample$DAY.txt\"
 
 
