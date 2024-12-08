@@ -19,17 +19,26 @@ else
 	SAMPLE_RESULT="$2"
 fi
 
-TEMPLATE="--FILENAME_INPUT = \"inputs/input$DAY.txt\"
+TEMPLATE="require (\"utils\")
+
+--FILENAME_INPUT = \"inputs/input$DAY.txt\"
 FILENAME_INPUT = \"inputs/sample$DAY.txt\"
 
 
 function parse_data(filename)
-	local f = io.open(filename, \"r\")
-	local raw_data = f:read(\"*all\")
-	f:close()
+	--local f = io.open(filename, "r")
+	local data = {}
 
-	local data = raw_data -- TODO
+	local i = 1
+	for line in io.lines(filename) do
+		data[i] = {}
+		for num in line:gmatch(\"%d+\") do
+			table.insert(data[i], tonumber(num))
+		end
+		i = i + 1
+	end
 
+	--f:close()
 	return data
 end
 
